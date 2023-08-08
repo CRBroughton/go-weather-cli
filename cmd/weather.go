@@ -141,7 +141,7 @@ var weatherCmd = &cobra.Command{
 func getCurrentWeather() (weather WeatherResponse, err error) {
 	var weatherResponse WeatherResponse
 
-	url := "https://api.openweathermap.org/data/3.0/onecall?lat=50.8224243265497&lon=-0.13670887945602617&exclude=hourly,daily&units=metric&appid=" + env.GetAPIKey()
+	url := "https://api.openweathermap.org/data/3.0/onecall?lat=" + env.GetLat() + "lon=" + env.GetLon() + "&exclude=hourly,daily&units=metric&appid=" + env.GetAPIKey()
 
 	res, err := http.Get(url)
 
