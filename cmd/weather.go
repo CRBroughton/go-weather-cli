@@ -124,7 +124,7 @@ var weatherCmd = &cobra.Command{
 	Long:  "Gets the current weather for the specified location",
 
 	Run: func(cmd *cobra.Command, args []string) {
-		weather, err := getCurrentWeather()
+		weather, err := getCurrentWeather("https://api.openweathermap.org/data/3.0/onecall?lat=" + env.GetLat() + "lon=" + env.GetLon() + "&exclude=hourly,daily&units=metric&appid=" + env.GetAPIKey())
 
 		if err != nil {
 			fmt.Println("Error getting current weather", err)
@@ -138,10 +138,8 @@ var weatherCmd = &cobra.Command{
 	},
 }
 
-func getCurrentWeather() (weather WeatherResponse, err error) {
+func getCurrentWeather(url string) (weather WeatherResponse, err error) {
 	var weatherResponse WeatherResponse
-
-	url := "https://api.openweathermap.org/data/3.0/onecall?lat=" + env.GetLat() + "lon=" + env.GetLon() + "&exclude=hourly,daily&units=metric&appid=" + env.GetAPIKey()
 
 	res, err := http.Get(url)
 
