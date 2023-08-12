@@ -118,13 +118,14 @@ type WeatherResponse struct {
 	Alerts         []Alert        `json:"alerts"`
 }
 
+var tempType = "metric"
 var weatherCmd = &cobra.Command{
 	Use:   "weather",
 	Short: "Get the current weather",
 	Long:  "Gets the current weather for the specified location",
 
 	Run: func(cmd *cobra.Command, args []string) {
-		weather, err := getCurrentWeather("https://api.openweathermap.org/data/3.0/onecall?lat=" + env.GetLat() + "lon=" + env.GetLon() + "&exclude=hourly,daily&units=metric&appid=" + env.GetAPIKey())
+		weather, err := getCurrentWeather("https://api.openweathermap.org/data/3.0/onecall?lat=" + env.GetLat() + "lon=" + env.GetLon() + "&exclude=hourly,daily&units=" + tempType + "&appid=" + env.GetAPIKey())
 
 		if err != nil {
 			fmt.Println("Error getting current weather", err)
@@ -134,7 +135,6 @@ var weatherCmd = &cobra.Command{
 		fmt.Println("Current weather:", weather.Current.Weather[0].Main+" - "+weather.Current.Weather[0].Description)
 		fmt.Println("Cloud cover:", weather.Current.Clouds)
 		fmt.Println("Temperature:", weather.Current.Temp)
-
 	},
 }
 
@@ -161,6 +161,7 @@ func getCurrentWeather(url string) (weather WeatherResponse, err error) {
 }
 
 func Execute() {
+	weatherCmd.Flags().StringVarP(&tempType, "type", "t", "metric", "Celcius or Fahrenheit")
 	if err := weatherCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
